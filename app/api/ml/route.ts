@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     // Send the file to FastAPI backend
-    const mlResponse = await fetch("http://localhost:8000/predict", {
+    const mlResponse = await fetch("NEXT_PUBLIC_API_URL", {
       method: "POST",
       body: formData, // sending the PDF file directly
     });

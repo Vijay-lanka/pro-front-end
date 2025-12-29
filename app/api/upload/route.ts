@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     if (insertError) throw insertError;
 
     // 3️⃣ Call FastAPI backend for ML analysis
-    const mlResponse = await fetch("http://127.0.0.1:8000/predict", {
+    const mlResponse = await fetch("NEXT_PUBLIC_API_URL", {
       method: "POST",
       body: formData, // send the PDF directly
     });
