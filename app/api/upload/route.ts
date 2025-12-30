@@ -28,11 +28,11 @@ export async function POST(req: Request) {
 
     if (insertError) throw insertError;
 
-    // 3️⃣ Call FastAPI ML backend
-    const mlResponse = await fetch(process.env.ML_API_URL!, {
-      method: "POST",
-      body: formData, // PDF is sent correctly
-    });
+  const mlResponse = await fetch(process.env.ML_API_URL!, {
+  method: "POST",
+  body: formData,
+});
+
 
     if (!mlResponse.ok) {
       const errorText = await mlResponse.text();
