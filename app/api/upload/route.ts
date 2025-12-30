@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     if (insertError) throw insertError;
 
     // 3️⃣ Call Railway ML API (PRODUCTION)
+    console.log("ML_API_URL USED =", process.env.ML_API_URL);
     const mlResponse = await fetch(process.env.ML_API_URL!, {
       method: "POST",
       body: formData,
