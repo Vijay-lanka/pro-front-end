@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -28,20 +28,20 @@ export async function POST(req: Request) {
 
     if (insertError) throw insertError;
 
-  const mlResponse = await fetch(process.env.ML_API_URL!, {
-  method: "POST",
-  body: formData,
-});
-
+    // 3️⃣ Call Railway ML API (PRODUCTION)
+    const mlResponse = await fetch(process.env.ML_API_URL!, {
+      method: "POST",
+      body: formData,
+      signal: AbortSignal.timeout(60_000),
+    });
 
     if (!mlResponse.ok) {
-      const errorText = await mlResponse.text();
-      throw new Error(`ML API failed: ${errorText}`);
+      const text = await mlResponse.text();
+      throw new Error(`ML API error: ${text}`);
     }
 
     const mlData = await mlResponse.json();
 
-    // 4️⃣ Return combined response
     return NextResponse.json({
       success: true,
       fileId: insertedRow.id,
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     console.error("Upload/ML Error:", err);
     return NextResponse.json({
       success: false,
-      error: err instanceof Error ? err.message : "Something went wrong",
+      error: err instanceof Error ? err.message : "Upload or analysis failed",
     });
   }
 }
